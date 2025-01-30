@@ -1,0 +1,26 @@
+default-network-instance: default
+
+params:
+  redundancy: single-primary
+  persistence: preserve
+  ack-type: rib-fib
+
+operations:
+  - op: add
+    election-id: 1:0
+    nh:
+      index: 1
+      ip-address: 192.168.20.2
+
+  - op: add
+    election-id: 1:0
+    nhg:
+      id: 1
+      next-hop:
+        - index: 1
+
+  - op: add
+    election-id: 1:0
+    ipv4:
+      prefix: 10.10.10.2/32
+      nhg: 1
