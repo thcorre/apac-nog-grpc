@@ -1,0 +1,274 @@
+{
+  "interface": [
+    {
+      "name": "ethernet-1/1",
+      "description": "To-Leaf1",
+      "admin-state": "enable",
+      "subinterface": [
+        {
+          "index": 0,
+          "ipv4": {
+            "admin-state": "enable",
+            "address": [
+              {
+                "ip-prefix": "192.168.10.3/31"
+              }
+            ]
+          },
+          "ipv6": {
+            "admin-state": "enable",
+            "address": [
+              {
+                "ip-prefix": "192:168:10::3/127"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "ethernet-1/2",
+      "description": "To-Leaf2",
+      "admin-state": "enable",
+      "subinterface": [
+        {
+          "index": 0,
+          "ipv4": {
+            "admin-state": "enable",
+            "address": [
+              {
+                "ip-prefix": "192.168.20.3/31"
+              }
+            ]
+          },
+          "ipv6": {
+            "admin-state": "enable",
+            "address": [
+              {
+                "ip-prefix": "192:168:20::3/127"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "mgmt0",
+      "admin-state": "enable",
+      "subinterface": [
+        {
+          "index": 0,
+          "admin-state": "enable",
+          "ipv4": {
+            "admin-state": "enable",
+            "dhcp-client": {
+            }
+          },
+          "ipv6": {
+            "admin-state": "enable",
+            "dhcp-client": {
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "lo0",
+      "admin-state": "enable",
+      "subinterface": [
+        {
+          "index": 0,
+          "ipv4": {
+            "admin-state": "enable",
+            "address": [
+              {
+                "ip-prefix": "10.10.10.3/24"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "system0",
+      "subinterface": [
+        {
+          "index": 0,
+          "ipv4": {
+            "admin-state": "enable",
+            "address": [
+              {
+                "ip-prefix": "3.3.3.3/32"
+              }
+            ]
+          },
+          "ipv6": {
+            "admin-state": "enable",
+            "address": [
+              {
+                "ip-prefix": "2001::3/128"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "routing-policy": {
+    "prefix-set": [
+      {
+        "name": "groute",
+        "prefix": [
+          {
+            "ip-prefix": "10.10.10.0/24",
+            "mask-length-range": "24..32"
+          }
+        ]
+      }
+    ],
+    "policy": [
+      {
+        "name": "export-all",
+        "statement": [
+          {
+            "name": "all-routes",
+            "action": {
+              "policy-result": "accept"
+            }
+          },
+          {
+            "name": "all-direct",
+            "match": {
+              "protocol": "local"
+            },
+            "action": {
+              "policy-result": "accept"
+            }
+          }
+        ]
+      },
+      {
+        "name": "import-all",
+        "statement": [
+          {
+            "name": "all-routes",
+            "action": {
+              "policy-result": "accept"
+            }
+          }
+        ]
+      },
+      {
+        "name": "reject-groute",
+        "statement": [
+          {
+            "name": "r1",
+            "match": {
+              "prefix-set": "groute"
+            },
+            "action": {
+              "policy-result": "reject"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "network-instance": [
+    {
+      "name": "default",
+      "type": "default",
+      "admin-state": "enable",
+      "interface": [
+        {
+          "name": "ethernet-1/1.0"
+        },
+        {
+          "name": "ethernet-1/2.0"
+        },
+        {
+          "name": "lo0.0"
+        },
+        {
+          "name": "system0.0"
+        }
+      ],
+      "protocols": {
+        "bgp": {
+          "autonomous-system": 64500,
+          "router-id": "3.3.3.3",
+          "ebgp-default-policy": {
+            "import-reject-all": false,
+            "export-reject-all": false
+          },
+          "afi-safi": [
+            {
+              "afi-safi-name": "ipv4-unicast",
+              "admin-state": "enable"
+            }
+          ],
+          "group": [
+            {
+              "group-name": "ebgp",
+              "afi-safi": [
+                {
+                  "afi-safi-name": "ipv6-unicast",
+                  "admin-state": "enable"
+                }
+              ]
+            }
+          ],
+          "neighbor": [
+            {
+              "peer-address": "192.168.10.2",
+              "peer-as": 64501,
+              "peer-group": "ebgp",
+              "afi-safi": [
+                {
+                  "afi-safi-name": "ipv6-unicast",
+                  "admin-state": "disable"
+                }
+              ]
+            },
+            {
+              "peer-address": "192.168.20.2",
+              "peer-as": 64502,
+              "peer-group": "ebgp",
+              "import-policy": [
+                "reject-groute"
+              ],
+              "afi-safi": [
+                {
+                  "afi-safi-name": "ipv6-unicast",
+                  "admin-state": "disable"
+                }
+              ]
+            },
+            {
+              "peer-address": "192:168:10::2",
+              "peer-as": 64501,
+              "peer-group": "ebgp",
+              "afi-safi": [
+                {
+                  "afi-safi-name": "ipv4-unicast",
+                  "admin-state": "disable"
+                }
+              ]
+            },
+            {
+              "peer-address": "192:168:20::2",
+              "peer-as": 64502,
+              "peer-group": "ebgp",
+              "afi-safi": [
+                {
+                  "afi-safi-name": "ipv4-unicast",
+                  "admin-state": "disable"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
