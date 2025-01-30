@@ -10,9 +10,9 @@ This lab contains 2 leafs and 1 spine - all running [Nokia SR Linux](https://www
 
 There are also 4 clients running a light weight linux OS.
 
-See the [topology]() file for more details.
+See the [topology](n93-grpc.clab.yml) file for more details.
 
-Once deployed and the full configuration is pushed, clients are connected over L2 and L3 EVPN-VXLAN. For more details on configuration of EVPN-VXLAN refer to the repo used for the EVPN workshop at [NANOG 92]().
+Once deployed and the full configuration is pushed, clients are connected over L2 and L3 EVPN-VXLAN. For more details on configuration of EVPN-VXLAN refer to the repo used for the EVPN workshop at [NANOG 92](https://github.com/srlinuxamericas/N92-evpn).
 
 Lab Topology
 
@@ -20,15 +20,27 @@ Lab Topology
 
 ### Deploying the Lab
 
-Use [Containerlab]() to deploy the lab.
+Use [Containerlab](https://containerlab.dev/) to deploy the lab.
 
 This lab can be deployed using GitHub Codespaces. When Codespace is launched, the repo is already cloned.
+
+---
+<div align=center>
+<a href="https://codespaces.new/srlinuxamericas/n93-grpc?quickstart=1">
+<img src="https://gitlab.com/rdodin/pics/-/wikis/uploads/d78a6f9f6869b3ac3c286928dd52fa08/run_in_codespaces-v1.svg?sanitize=true" style="width:50%"/></a>
+
+**[Run](https://codespaces.new/srlinuxamericas/n93-grpc?quickstart=1) this lab in GitHub Codespaces for free**.  
+[Learn more](https://containerlab.dev/manual/codespaces/) about Containerlab for Codespaces.
+
+</div>
+
+---
 
 
 If deploying on your own VM, clone this repo to the VM.
 
 ```
-git clone
+git clone https://github.com/srlinuxamericas/n93-grpc.git
 ```
 
 Once codespace is initiatialized or the repo is cloned to your VM, deploy the lab:
