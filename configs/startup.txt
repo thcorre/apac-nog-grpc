@@ -1,0 +1,7 @@
+set / system grpc-server mgmt services [ gnmi gnoi gnsi gribi ]
+set / system aaa authentication admin-user password admin
+set / system aaa authorization role ext-clients services [ gnoi ]
+set / system aaa authentication user client1 password client1
+set / system aaa authentication user client1 role [ ext-clients ]
+set / system aaa authorization role gribi-clients services [ gribi ]
+set / system aaa authentication user grclient1 password grclient1 role [ gribi-clients ]
