@@ -83,7 +83,9 @@ If using codespaces, all the clients are installed along with codespace initiati
 If using your own VM with Internet access, install the clients using below instructions. If VM is in a closed environment, check the respective client pages for alternate installation options.
 
 ```
-install clients
+bash -c "$(curl -sL https://get-gnmic.openconfig.net)"
+bash -c "$(curl -sL https://get-gnoic.kmrd.dev)"
+bash -c "$(curl -sL https://get-gribic.kmrd.dev)"
 ```
 
 gNSIc is still in beta phase and the client will need to be compiled from the code.
@@ -112,7 +114,7 @@ Now, let's push the configuration to all 3 switches.
 
 ### gNMI Set
 
-The configuration files are located in this [repo]().
+The configuration files are located in this [repo](configs/).
 
 They include configuration for interfaces, underlay & overlay BGP and L2 & L3 EVPN-VXLAN. Open the files to view the configuration.
 
@@ -128,7 +130,16 @@ gnmic -a spine -u admin -p admin --skip-verify --encoding json_ietf set --update
 Expected output:
 
 ```
-
+{
+  "source": "leaf1",
+  "timestamp": 1738338086720992938,
+  "time": "2025-01-31T17:41:26.720992938+02:00",
+  "results": [
+    {
+      "operation": "UPDATE"
+    }
+  ]
+}
 ```
 
 Login to one of the switches and run the `show interface` command to validate that configuration was pushed and interfaces are now UP.
@@ -146,7 +157,7 @@ docker exec -it client1 bash
 and ping the client3 IP
 
 ```
-ping 172.16.10.60 -c 1
+ping -c 1 172.16.10.60
 ```
 
 Ping is successful.
@@ -156,13 +167,27 @@ Ping is successful.
 Now let's get the operational state of the interface using gNMI.
 
 ```
-gnmic set
+gnmic -a leaf1 -u admin -p admin --skip-verify get --path /interface[name=ethernet-1/10]/oper-state --encoding json_ietf
 ```
 
 Expected output:
 
 ```
-
+[
+  {
+    "source": "leaf1",
+    "timestamp": 1738338440926776288,
+    "time": "2025-01-31T17:47:20.926776288+02:00",
+    "updates": [
+      {
+        "Path": "srl_nokia-interfaces:interface[name=ethernet-1/10]/oper-state",
+        "values": {
+          "srl_nokia-interfaces:interface/oper-state": "up"
+        }
+      }
+    ]
+  }
+]
 ```
 
 ### Streaming Telemetry
@@ -183,9 +208,37 @@ Once the subscription is started, we expect the switch not to stream any data as
 
 Start the ping from client1 to client3 in a separate window.
 
-Refer to [above steps]().
+```
+docker exec -it client1 bash
+```
+
+```
+ping 172.16.10.60
+```
 
 Once the ping is started, we should start receiving statistics from the switch.
+
+Expected output:
+
+```
+{
+  "source": "leaf2",
+  "subscription-name": "default-1738338586",
+  "timestamp": 1738338586568435603,
+  "time": "2025-01-31T17:49:46.568435603+02:00",
+  "updates": [
+    {
+      "Path": "interface[name=ethernet-1/10]/statistics/out-octets",
+      "values": {
+        "interface/statistics/out-octets": "4633"
+      }
+    }
+  ]
+}
+{
+  "sync-response": true
+}
+```
 
 Stop the ping using `CTRL+c`.
 
@@ -208,6 +261,11 @@ gnoic -a leaf1 -u client1 -p client1 --skip-verify file stat --path /etc/opt/srl
 Expected output:
 
 ```
++-------------+------------------------------+---------------------------+------------+------------+--------+
+| Target Name |             Path             |       LastModified        |    Perm    |   Umask    |  Size  |
++-------------+------------------------------+---------------------------+------------+------------+--------+
+| leaf1:57400 | /etc/opt/srlinux/config.json | 2025-01-31T17:40:01+02:00 | -rw-rw-r-- | -----w--w- | 102052 |
++-------------+------------------------------+---------------------------+------------+------------+--------+
 ```
 
 The config file is present in the path. Now let's transfer the file our host VM.
@@ -219,7 +277,9 @@ gnoic -a leaf1 -u client1 -p client1 --skip-verify file get --file /etc/opt/srli
 Expected output:
 
 ```
-
+INFO[0000] "leaf1:57400" received 64000 bytes           
+INFO[0000] "leaf1:57400" received 38052 bytes           
+INFO[0000] "leaf1:57400" file "/etc/opt/srlinux/config.json" saved 
 ```
 
 Verify that the file is now present locally on your host.
@@ -255,7 +315,8 @@ gnoic -a leaf1 -u client1 -p client1 --skip-verify file put --file configs/spine
 Expected output for Put file:
 
 ```
-
+INFO[0000] "leaf1:57400" sending file="configs/spine-gnmi-config.json" hash 
+INFO[0000] "leaf1:57400" file "configs/spine-gnmi-config.json" written successfully 
 ```
 
 Verify on leaf1 that the file transferred exists.
@@ -267,7 +328,11 @@ gnoic -a leaf1 -u client1 -p client1 --skip-verify file stat --path /var/log/srl
 Expected output:
 
 ```
-
++-------------+-----------------------------------------+---------------------------+------------+------------+------+
+| Target Name |                  Path                   |       LastModified        |    Perm    |   Umask    | Size |
++-------------+-----------------------------------------+---------------------------+------------+------------+------+
+| leaf1:57400 | /var/log/srlinux/spine-gnmi-config.json | 2025-01-31T17:51:39+02:00 | -rwxrwxrwx | -----w--w- | 5949 |
++-------------+-----------------------------------------+---------------------------+------------+------------+------+
 ```
 
 At this time, the user `client1` has permissions to transfer a file over to leaf1.
@@ -322,7 +387,10 @@ gnsic -a leaf1 -u admin -p admin --skip-verify authz rotate --policy "{\"name\":
 Expected output:
 
 ```
-
+INFO[0000] targets: map[leaf1:57400:0xc000456260]       
+INFO[0000] "leaf1:57400": got UploadResponse            
+INFO[0001] "leaf1:57400": sending finalize request      
+INFO[0001] "leaf1:57400": closing stream  
 ```
 
 Now, test the list, get, put file operations again.
@@ -332,7 +400,9 @@ Refer to the steps above.
 Put operation will be denied with the below output.
 
 ```
-
+INFO[0000] "leaf1:57400" sending file="configs/spine-gnmi-config.json" hash 
+ERRO[0000] "leaf1:57400" File Put failed: rpc error: code = PermissionDenied desc = User 'client1' is not authorized to use rpc '/gnoi.file.File/Put' 
+Error: there was 1 error(s)
 ```
 
 ## gRIBI Use Case
@@ -342,7 +412,7 @@ gRIBI is supported on select Nokia switches. See list [here]() and a license is 
 Save the current lab:
 
 ```
-
+sudo clab save
 ```
 
 After obtaining a license, destroy the current lab:
