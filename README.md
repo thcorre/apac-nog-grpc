@@ -22,7 +22,7 @@ Lab Topology
 
 Use [Containerlab](https://containerlab.dev/) to deploy the lab.
 
-This lab can be deployed using GitHub Codespaces. When Codespace is launched, the repo is already cloned.
+This lab can be deployed using GitHub Codespaces. When Codespace is launched, the repo is already cloned and Containerlab is installed.
 
 ---
 <div align=center>
