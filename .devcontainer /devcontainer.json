@@ -1,6 +1,6 @@
 {
     "image": "ghcr.io/srl-labs/containerlab/clab-devcontainer:0.59.0",
-    "postStartCommand": "bash n93-grpc/codespace-script.sh",
+    "postStartCommand": "bash workspaces/n93-grpc/codespace-script.sh",
     "hostRequirements": {
         "cpus": 4,
         "memory": "16gb",
