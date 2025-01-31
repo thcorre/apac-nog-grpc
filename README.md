@@ -341,7 +341,10 @@ Let's block that by pushing an authorization policy using gNSI Authz service.
 
 This is the Authz policy payload that we will push. This gives access to gNOI File Get & Set to user `client1` and will deny gNOI File Put for this user.
 
-```json
+<details>
+<summary>Authz Payload</summary>
+<br>
+<pre>
 {
   "name": "Ext-clients",
   "allow_rules": [
@@ -376,7 +379,8 @@ This is the Authz policy payload that we will push. This gives access to gNOI Fi
     }
   ]
 }
-```
+</pre>
+</details>
 
 Let's push the policy using gNSIc.
 
@@ -431,11 +435,14 @@ sudo clab dep -t gribi/n93-gribi.clab.yml
 
 The lab is deployed with the full configuration along with a loopback interface on leaf2 and spine. A static route is added on leaf2 to reach the loopback on spine.
 
-We will use gRIBc to install a route on spine to reach the loopback on leaf2.
+We will use gRIBIc to install a route on spine to reach the loopback on leaf2.
 
 Here's the payload that we will push.
 
-```yaml
+<details>
+<summary>gRIBI Payload </summary>
+<br>
+<pre>
 default-network-instance: default
 
 params:
@@ -462,7 +469,8 @@ operations:
     ipv4:
       prefix: 10.10.10.2/32
       nhg: 1
-```
+</pre>
+</details>
 
 Before we install the route, let's verify that ping does not work between the leaf2 and spine loopbacks.
 
@@ -488,36 +496,38 @@ We will be using gNMI to get this state information.
 gnmic -a spine -u admin -p admin --skip-verify get --path "/network-instance[name=default]/route-table/ipv4-unicast" --encoding=JSON_IETF --depth 2 | grep -E "prefix|active|type"
 ```
 
-Expected output:
-
-```
-                "active": true,
-                "ipv4-prefix": "3.3.3.3/32",
-                "route-type": "srl_nokia-common:host"
-                "active": true,
-                "ipv4-prefix": "10.10.10.0/24",
-                "route-type": "srl_nokia-common:local"
-                "active": true,
-                "ipv4-prefix": "10.10.10.3/32",
-                "route-type": "srl_nokia-common:host"
-                "active": true,
-                "ipv4-prefix": "10.10.10.255/32",
-                "route-type": "srl_nokia-common:host"
-                "active": true,
-                "ipv4-prefix": "192.168.10.2/31",
-                "route-type": "srl_nokia-common:local"
-                "active": true,
-                "ipv4-prefix": "192.168.10.3/32",
-                "route-type": "srl_nokia-common:host"
-                "active": true,
-                "ipv4-prefix": "192.168.20.2/31",
-                "route-type": "srl_nokia-common:local"
-                "active": true,
-                "ipv4-prefix": "192.168.20.3/32",
-                "route-type": "srl_nokia-common:host"
-              "active-routes": 8,
-              "active-routes-with-ecmp": 0,
-```
+<details>
+<summary>Expected Output</summary>
+<br>
+<pre>
+  "active": true,
+  "ipv4-prefix": "3.3.3.3/32",
+  "route-type": "srl_nokia-common:host"
+  "active": true,
+  "ipv4-prefix": "10.10.10.0/24",
+  "route-type": "srl_nokia-common:local"
+  "active": true,
+  "ipv4-prefix": "10.10.10.3/32",
+  "route-type": "srl_nokia-common:host"
+  "active": true,
+  "ipv4-prefix": "10.10.10.255/32",
+  "route-type": "srl_nokia-common:host"
+  "active": true,
+  "ipv4-prefix": "192.168.10.2/31",
+  "route-type": "srl_nokia-common:local"
+  "active": true,
+  "ipv4-prefix": "192.168.10.3/32",
+  "route-type": "srl_nokia-common:host"
+  "active": true,
+  "ipv4-prefix": "192.168.20.2/31",
+  "route-type": "srl_nokia-common:local"
+  "active": true,
+  "ipv4-prefix": "192.168.20.3/32",
+  "route-type": "srl_nokia-common:host"
+  "active-routes": 8,
+  "active-routes-with-ecmp": 0,
+</pre>
+</details>
 
 If you would like to see the full output, try running the above command without the grep.
 
@@ -560,9 +570,10 @@ Now, let's push the gRIBI route. The route [instructions](#L436) are saved in a 
 gribic -a spine:57400 -u grclient1 -p grclient1 --skip-verify modify --input-file grib-input.yml
 ```
 
-Expected output:
-
-```
+<details>
+<summary>Expected Output</summary>
+<br>
+<pre>
 INFO[0000] sending request=params:{redundancy:SINGLE_PRIMARY persistence:PRESERVE ack_type:RIB_AND_FIB_ACK} to "spine:57400" 
 INFO[0000] sending request=election_id:{high:1} to "spine:57400" 
 INFO[0000] spine:57400
@@ -641,7 +652,8 @@ response: result: {
   status: FIB_PROGRAMMED
   timestamp: 1738344091835778815
 } 
-```
+</pre>
+</details>
 
 The operation is successful. Let's get the gRIBI installed route.
 
@@ -730,44 +742,47 @@ Now let's verify the route table on spine and confirm that there is a route for 
 gnmic -a spine -u admin -p admin --skip-verify get --path "/network-instance[name=default]/route-table/ipv4-unicast" --encoding=JSON_IETF --depth 2 | grep -E "prefix|active|type"
 ```
 
-Expected output
-```
-                "active": true,
-                "ipv4-prefix": "1.1.1.1/32",
-                "route-type": "srl_nokia-common:bgp"
-                "active": true,
-                "ipv4-prefix": "2.2.2.2/32",
-                "route-type": "srl_nokia-common:bgp"
-                "active": true,
-                "ipv4-prefix": "3.3.3.3/32",
-                "route-type": "srl_nokia-common:host"
-                "active": true,
-                "ipv4-prefix": "10.10.10.0/24",
-                "route-type": "srl_nokia-common:local"
-                "active": true,
-                "ipv4-prefix": "10.10.10.2/32",
-                "route-type": "srl_nokia-common:gribi"
-                "active": true,
-                "ipv4-prefix": "10.10.10.3/32",
-                "route-type": "srl_nokia-common:host"
-                "active": true,
-                "ipv4-prefix": "10.10.10.255/32",
-                "route-type": "srl_nokia-common:host"
-                "active": true,
-                "ipv4-prefix": "192.168.10.2/31",
-                "route-type": "srl_nokia-common:local"
-                "active": true,
-                "ipv4-prefix": "192.168.10.3/32",
-                "route-type": "srl_nokia-common:host"
-                "active": true,
-                "ipv4-prefix": "192.168.20.2/31",
-                "route-type": "srl_nokia-common:local"
-                "active": true,
-                "ipv4-prefix": "192.168.20.3/32",
-                "route-type": "srl_nokia-common:host"
-              "active-routes": 11,
-              "active-routes-with-ecmp": 0,
-```
+<details>
+<summary>Expected Output</summary>
+<br>
+<pre>
+        "active": true,
+        "ipv4-prefix": "1.1.1.1/32",
+        "route-type": "srl_nokia-common:bgp"
+        "active": true,
+        "ipv4-prefix": "2.2.2.2/32",
+        "route-type": "srl_nokia-common:bgp"
+        "active": true,
+        "ipv4-prefix": "3.3.3.3/32",
+        "route-type": "srl_nokia-common:host"
+        "active": true,
+        "ipv4-prefix": "10.10.10.0/24",
+        "route-type": "srl_nokia-common:local"
+        "active": true,
+        "ipv4-prefix": "10.10.10.2/32",
+        "route-type": "srl_nokia-common:gribi"
+        "active": true,
+        "ipv4-prefix": "10.10.10.3/32",
+        "route-type": "srl_nokia-common:host"
+        "active": true,
+        "ipv4-prefix": "10.10.10.255/32",
+        "route-type": "srl_nokia-common:host"
+        "active": true,
+        "ipv4-prefix": "192.168.10.2/31",
+        "route-type": "srl_nokia-common:local"
+        "active": true,
+        "ipv4-prefix": "192.168.10.3/32",
+        "route-type": "srl_nokia-common:host"
+        "active": true,
+        "ipv4-prefix": "192.168.20.2/31",
+        "route-type": "srl_nokia-common:local"
+        "active": true,
+        "ipv4-prefix": "192.168.20.3/32",
+        "route-type": "srl_nokia-common:host"
+      "active-routes": 11,
+      "active-routes-with-ecmp": 0,
+</pre> 
+</details>
 
 There is an active route with `gRIBI` as the owner.
 
