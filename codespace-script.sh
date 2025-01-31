@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -eux
 curl -sL https://containerlab.dev/setup | sudo -E bash -s "all"
 
 sudo bash -c "$(curl -sL https://get-gribic.kmrd.dev)"
