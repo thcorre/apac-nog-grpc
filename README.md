@@ -439,10 +439,7 @@ We will use gRIBIc to install a route on spine to reach the loopback on leaf2.
 
 Here's the payload that we will push.
 
-<details>
-<summary>gRIBI Payload </summary>
-<br>
-<pre>
+```yaml
 default-network-instance: default
 
 params:
@@ -469,8 +466,7 @@ operations:
     ipv4:
       prefix: 10.10.10.2/32
       nhg: 1
-</pre>
-</details>
+```
 
 Before we install the route, let's verify that ping does not work between the leaf2 and spine loopbacks.
 
