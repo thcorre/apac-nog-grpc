@@ -16,7 +16,7 @@ Once deployed and the full configuration is pushed, clients are connected over L
 
 Lab Topology
 
-(Add picture)
+![image](lab-topology.jpg)
 
 ### Deploying the Lab
 
@@ -37,13 +37,17 @@ This lab can be deployed using GitHub Codespaces. When Codespace is launched, th
 ---
 
 
-If deploying on your own VM, clone this repo to the VM.
+If deploying on your own VM, clone this repo to the VM and install Containerlab on your VM.
 
 ```
 git clone https://github.com/srlinuxamericas/n93-grpc.git
 ```
 
-Once codespace is initiatialized or the repo is cloned to your VM, deploy the lab:
+```
+curl -sL https://containerlab.dev/setup | sudo -E bash -s "all"
+```
+
+To deploy the lab in Codespace or your own VM:
 
 ```
 sudo clab dep
@@ -51,7 +55,7 @@ sudo clab dep
 
 ### Connecting to Switches and Clients
 
-To connect to either leaf or spine, use ssh. Below command is to connect to leaf1.
+To connect to either leafs or spine, use ssh. Below command is to connect to leaf1.
 
 ```
 ssh leaf1
@@ -59,7 +63,7 @@ ssh leaf1
 
 If asked for login, use `admin/admin`.
 
-To connect to the client, see below command (showing client1 as an example).
+To connect to the client (showing client1 as an example):
 
 ```
 docker exec -it client1 bash
@@ -69,14 +73,14 @@ docker exec -it client1 bash
 
 We will be using the following gRPC clients:
 
-- gNMIc
-- gNOIc
-- gNSIc
-- gRIBIc
+- [gNMIc](https://gnmic.openconfig.net/)
+- [gNOIc](https://gnoic.kmrd.dev/)
+- [gNSIc](https://github.com/karimra/gnsic)
+- [gRIBIc](https://gribic.kmrd.dev/)
 
 If using codespaces, all the clients are installed along with codespace initiatialization.
 
-If using your own VM with Internet access, install the clients using below instructions. If VM is in a closed environment, check the respective client pages for alternation installation options.
+If using your own VM with Internet access, install the clients using below instructions. If VM is in a closed environment, check the respective client pages for alternate installation options.
 
 ```
 install clients
