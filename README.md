@@ -22,7 +22,7 @@ Lab Topology
 
 Use [Containerlab](https://containerlab.dev/) to deploy the lab.
 
-This lab can be deployed using GitHub Codespaces. When Codespace is launched, the repo is already cloned and Containerlab is installed.
+This lab can be deployed using GitHub Codespaces.
 
 ---
 <div align=center>
@@ -37,14 +37,18 @@ This lab can be deployed using GitHub Codespaces. When Codespace is launched, th
 ---
 
 
-If deploying on your own VM, clone this repo to the VM and install Containerlab on your VM.
+If deploying on your own VM, clone this repo to the VM.
 
 ```
 git clone https://github.com/srlinuxamericas/n93-grpc.git
 ```
 
+On codespaces or your own VM:
+Run the `codespace-script.sh` to install Containerlab and gRPC clients.
+Note - this script assumes Go is installed on your VM. If you need to install Go separately, refer to these [instructions](https://go.dev/doc/install)
+
 ```
-curl -sL https://containerlab.dev/setup | sudo -E bash -s "all"
+bash codespace-script.sh
 ```
 
 To deploy the lab in Codespace or your own VM:
@@ -78,20 +82,15 @@ We will be using the following gRPC clients:
 - [gNSIc](https://github.com/karimra/gnsic)
 - [gRIBIc](https://gribic.kmrd.dev/)
 
-If using codespaces, all the clients are installed along with codespace initiatialization.
+All 4 clients are installed using the steps [above](L#46).
 
-If using your own VM with Internet access, install the clients using below instructions. If VM is in a closed environment, check the respective client pages for alternate installation options.
-
-```
-bash -c "$(curl -sL https://get-gnmic.openconfig.net)"
-bash -c "$(curl -sL https://get-gnoic.kmrd.dev)"
-bash -c "$(curl -sL https://get-gribic.kmrd.dev)"
-```
-
-gNSIc is still in beta phase and the client will need to be compiled from the code.
+Verify that clients are installed:
 
 ```
-gnsic client
+gnmic version
+gnoic version
+gnsic version
+gribic version
 ```
 
 ## gNMI Use Cases
