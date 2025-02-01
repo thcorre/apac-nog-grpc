@@ -20,9 +20,9 @@ Lab Topology
 
 ### Deploying the Lab
 
-Use [Containerlab](https://containerlab.dev/) to deploy the lab.
+We will use [Containerlab](https://containerlab.dev/) to deploy the lab.
 
-This lab can be deployed using GitHub Codespaces.
+This lab can be deployed using GitHub Codespaces. After clicking the below icon, wait for 2 minutes for codespaces to be ready. During this initialization, codespace will install containerlab and gRPC clients so that you are all set to run the use cases immediately.
 
 ---
 <div align=center>
@@ -43,34 +43,16 @@ If deploying on your own VM, clone this repo to the VM.
 git clone https://github.com/srlinuxamericas/n93-grpc.git
 ```
 
-On codespaces or your own VM:
-Run the `codespace-script.sh` to install Containerlab and gRPC clients.
-Note - this script assumes Go is installed on your VM. If you need to install Go separately, refer to these [instructions](https://go.dev/doc/install)
+On our own VM run the `vm-client-install.sh` script to install Containerlab and gRPC clients.
 
 ```
-bash codespace-script.sh
+bash vm-client-install.sh
 ```
 
 To deploy the lab in Codespace or your own VM:
 
 ```
 sudo clab dep
-```
-
-### Connecting to Switches and Clients
-
-To connect to either leafs or spine, use ssh. Below command is to connect to leaf1.
-
-```
-ssh leaf1
-```
-
-If asked for login, use `admin/admin`.
-
-To connect to the client (showing client1 as an example):
-
-```
-docker exec -it client1 bash
 ```
 
 ## gRPC Clients
@@ -91,6 +73,22 @@ gnmic version
 gnoic version
 gnsic version
 gribic version
+```
+
+### Connecting to Switches and Clients
+
+To connect to either leafs or spine, use ssh. Below command is to connect to leaf1.
+
+```
+ssh leaf1
+```
+
+If asked for login, use `admin/admin`.
+
+To connect to the client (showing client1 as an example):
+
+```
+docker exec -it client1 bash
 ```
 
 ## gNMI Use Cases
