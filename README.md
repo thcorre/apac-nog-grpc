@@ -20,7 +20,7 @@ Lab Topology
 
 ### Deploying the Lab
 
-We will use [Containerlab](https://containerlab.dev/) to deploy the lab.
+#### Using Codespaces
 
 This lab can be deployed using GitHub Codespaces. After clicking the below icon, wait for 2 minutes for codespaces to be ready. During this initialization, codespace will install containerlab and gRPC clients so that you are all set to run the use cases immediately.
 
@@ -36,6 +36,7 @@ This lab can be deployed using GitHub Codespaces. After clicking the below icon,
 
 ---
 
+#### Using own VM
 
 If deploying on your own VM, clone this repo to the VM.
 
@@ -43,11 +44,15 @@ If deploying on your own VM, clone this repo to the VM.
 git clone https://github.com/srlinuxamericas/n93-grpc.git
 ```
 
-On our own VM run the `vm-client-install.sh` script to install Containerlab and gRPC clients.
+On your VM run the `vm-client-install.sh` script to install Containerlab and gRPC clients.
 
 ```
 bash vm-client-install.sh
 ```
+
+### Deploying the lab
+
+We will use [Containerlab](https://containerlab.dev/) to deploy the lab.
 
 To deploy the lab in Codespace or your own VM:
 
@@ -400,7 +405,7 @@ INFO[0001] "leaf1:57400": closing stream
 
 Now, test the list, get, put file operations again.
 
-Refer to the steps [above](#l298).
+Refer to the steps [above](L#301).
 
 Put operation will be denied with the below output.
 
