@@ -405,7 +405,7 @@ INFO[0001] "leaf1:57400": closing stream
 
 Now, test the list, get, put file operations again.
 
-Refer to the steps [above](L#301).
+Refer to the steps [above](#L301).
 
 Put operation will be denied with the below output.
 
