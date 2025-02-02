@@ -75,6 +75,10 @@ gnsic version
 gribic version
 ```
 
+All gnmic, gnoic, gnsic and gribic commands will be executed from the VM.
+
+![image](lab-setup.jpg)
+
 ### Connecting to Switches and Clients
 
 To connect to either leafs or spine, use ssh. Below command is to connect to leaf1.
@@ -99,7 +103,7 @@ The lab is deployed with minimum required startup configuration that enables gRP
 
 After the lab is deployed, connect to either leafs or spine.
 
-To list the current status of the interfaces, use:
+To list the current status of the interfaces on leafs or spine, use:
 
 ```
 show interface
@@ -154,7 +158,7 @@ docker exec -it client1 bash
 and ping the client3 IP
 
 ```
-ping -c 1 172.16.10.60
+ping -c 25 172.16.10.60
 ```
 
 Ping is successful.
@@ -396,7 +400,7 @@ INFO[0001] "leaf1:57400": closing stream
 
 Now, test the list, get, put file operations again.
 
-Refer to the steps above.
+Refer to the steps [above](#l298).
 
 Put operation will be denied with the below output.
 
@@ -410,13 +414,15 @@ Error: there was 1 error(s)
 
 gRIBI is supported on select Nokia switches. See list [here](https://documentation.nokia.com/srlinux/24-10/books/gribi/about-gribi.html) and a license is required to bring up these switch types in Containerlab.
 
+We will destroy the current lab and create a new lab with the spine chassis configured to be `x3b` that supports gRIBI. See the new lab's topology [here](gribi/n93-gribi.clab.yml).
+
 Save the current lab:
 
 ```
 sudo clab save
 ```
 
-After obtaining a license, copy the license to this [file](gribi/license-srlinux24.txt).
+After obtaining a license, copy the license to this [gribi/license-srlinux24.txt](gribi/license-srlinux24.txt).
 
 Destroy the current lab:
 
@@ -797,6 +803,8 @@ round-trip min/avg/max/stddev = 3.637/3.637/3.637/0.000 ms
 Ping is successful.
 
 That bring us to the end. Thank you !
+
+To destroy the lab, run `sudo clab des -a`.
 
 ## Useful links
 
