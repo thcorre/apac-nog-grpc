@@ -69,7 +69,7 @@ We will be using the following gRPC clients:
 - [gNSIc](https://github.com/karimra/gnsic)
 - [gRIBIc](https://gribic.kmrd.dev/)
 
-All 4 clients are installed using the steps [above](L#46).
+All 4 clients are installed when initializing the codespace. If using your own, run the script mentioned [above](#using-own-vm).
 
 Verify that clients are installed:
 
@@ -297,6 +297,8 @@ ls -lrt etc/opt/srlinux/config.json
 ## gNSI Use Case
 
 We will be using gNSI to configure an authorization policy on leaf1 that will prevent the user called `client1` (used for config file backup) from writing files on the switch.
+
+### Testing gNOI List, Get and Put
 
 Let's start by verifying that the user `client1` has access to list, get and put files on leaf1.
 
