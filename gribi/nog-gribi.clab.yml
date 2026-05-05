@@ -11,7 +11,7 @@ topology:
     kind: nokia_srlinux
   kinds:
     nokia_srlinux:
-      type: ixrd2l
+      type: ixr-d2l
       image: ghcr.io/nokia/srlinux:24.10.1
     linux:
       image: ghcr.io/srl-labs/network-multitool
@@ -26,7 +26,7 @@ topology:
       mgmt-ipv6: 2001:172:30:30::4
     spine:
       startup-config: configs/spine.txt
-      type: ixrx3b
+      type: ixr-x3b
       license: license-srlinux24.txt
       mgmt-ipv4: 172.30.30.3
       mgmt-ipv6: 2001:172:30:30::3
