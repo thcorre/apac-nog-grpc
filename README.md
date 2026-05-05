@@ -10,7 +10,7 @@ This lab contains 2 leafs and 1 spine - all running [Nokia SR Linux](https://www
 
 There are also 4 clients running a light weight linux OS.
 
-See the [topology](n93-grpc.clab.yml) file for more details.
+See the [topology](nog-grpc.clab.yml) file for more details.
 
 Once deployed and the full configuration is pushed, clients are connected over L2 and L3 EVPN-VXLAN.
 
@@ -26,10 +26,10 @@ This lab can be deployed using GitHub Codespaces. After clicking the below icon,
 
 ---
 <div align=center>
-<a href="https://codespaces.new/srlinuxamericas/n93-grpc?quickstart=1">
+<a href="https://codespaces.new/thcorre/apac-nog-grpc?quickstart=1">
 <img src="https://gitlab.com/rdodin/pics/-/wikis/uploads/d78a6f9f6869b3ac3c286928dd52fa08/run_in_codespaces-v1.svg?sanitize=true" style="width:50%"/></a>
 
-**[Run](https://codespaces.new/srlinuxamericas/n93-grpc?quickstart=1) this lab in GitHub Codespaces for free**.  
+**[Run](https://codespaces.new/thcorre/apac-nog-grpc?quickstart=1) this lab in GitHub Codespaces for free**.  
 [Learn more](https://containerlab.dev/manual/codespaces/) about Containerlab for Codespaces.
 
 </div>
@@ -41,7 +41,7 @@ This lab can be deployed using GitHub Codespaces. After clicking the below icon,
 If deploying on your own VM, clone this repo to the VM.
 
 ```
-git clone https://github.com/srlinuxamericas/n93-grpc.git
+git clone https://github.com/thcorre/apac-nog-grpc.git
 ```
 
 On your VM run the `vm-client-install.sh` script to install Containerlab and gRPC clients.
