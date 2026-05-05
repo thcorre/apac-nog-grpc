@@ -12,7 +12,7 @@ There are also 4 clients running a light weight linux OS.
 
 See the [topology](n93-grpc.clab.yml) file for more details.
 
-Once deployed and the full configuration is pushed, clients are connected over L2 and L3 EVPN-VXLAN. For more details on configuration of EVPN-VXLAN refer to the repo used for the EVPN workshop at [NANOG 92](https://github.com/srlinuxamericas/N92-evpn).
+Once deployed and the full configuration is pushed, clients are connected over L2 and L3 EVPN-VXLAN.
 
 Lab Topology
 
@@ -421,7 +421,7 @@ Error: there was 1 error(s)
 
 gRIBI is supported on select Nokia switches. See list [here](https://documentation.nokia.com/srlinux/24-10/books/gribi/about-gribi.html) and a license is required to bring up these switch types in Containerlab.
 
-We will destroy the current lab and create a new lab with the spine chassis configured to be `x3b` that supports gRIBI. See the new lab's topology [here](gribi/n93-gribi.clab.yml).
+We will destroy the current lab and create a new lab with the spine chassis configured to be `x3b` that supports gRIBI. See the new lab's topology [here](gribi/nog-gribi.clab.yml).
 
 Save the current lab:
 
@@ -437,10 +437,10 @@ Destroy the current lab:
 sudo clab des -a
 ```
 
-Create the lab using the updated [topology file](gribi/n93-gribi.clab.yml)
+Create the lab using the updated [topology file](gribi/nog-gribi.clab.yml)
 
 ```
-sudo clab dep -t gribi/n93-gribi.clab.yml
+sudo clab dep -t gribi/nog-gribi.clab.yml
 ```
 
 The lab is deployed with the full configuration along with a loopback interface on leaf2 and spine. A static route is added on leaf2 to reach the loopback on spine.
